@@ -1,13 +1,7 @@
 <script lang="ts">
+import type { Restaurant } from '@/types'
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
-type Restaurant = {
-  id: string
-  name: string
-  address: string
-  website: string
-  status: string
-}
 
 export default defineComponent({
   props: {
