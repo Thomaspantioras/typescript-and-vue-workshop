@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Restaurant } from '@/types'
-import { defineProps, computed } from 'vue'
+import { defineProps, computed, defineEmits } from 'vue'
 import type { PropType } from 'vue'
 
 // const props = defineProps({
@@ -58,8 +58,15 @@ const statusColor = computed(() => {
   }
 })
 
+// const emits = defineEmits(['delete-restaurant'])
+const emits = defineEmits<{
+  (e: 'delete-restaurant', restaurant: Restaurant): void
+}>()
+
 const deleteRestaurant = () => {
-  // this.$emit('delete-restaurant', this.restaurant)
+  if (props.restaurant) {
+    emits('delete-restaurant', props.restaurant)
+  }
 }
 </script>
 
