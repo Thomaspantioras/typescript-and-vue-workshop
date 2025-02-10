@@ -1,32 +1,50 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { defineComponent, ref, onMounted } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 import { restaurantStatusList } from '@/constants'
+import type { Restaurant } from '@/types'
 
-export default defineComponent({
-  emits: ['add-new-restaurant', 'cancel-new-restaurant'],
-  data: () => ({
-    newRestaurant: {
-      id: uuidv4(),
-      name: '',
-      address: '',
-      website: '',
-      status: 'Want to Try',
-    },
-    restaurantStatusList,
-  }),
+const emits = defineEmits<{
+  (e: 'add-new-restaurant', restaurant: Restaurant): void
+  (e: 'cancel-new-restaurant'): void
+}>()
+const elNameInput = ref<HTMLInputElement | null>(null)
+const newRestaurant = ref<Restaurant>({
+  id: uuidv4(),
+  name: '',
+  address: '',
+  website: '',
+  status: 'Want to Try',
+})
+
+const addRestaurant = () => {
+  emits('add-new-restaurant', newRestaurant.value)
+}
+const cancelNewRestaurant = () => {
+  emits('cancel-new-restaurant')
+}
+const updateName = (event: InputEvent) => {
+  if (event.data === ' ') {
+    // const target = event.target as HTMLInputElement
+    // newRestaurant.value.name = target.value
+    newRestaurant.value.name = (event.target as HTMLInputElement).value
+  }
+}
+onMounted(() => {
+  elNameInput.value?.focus()
 })
 </script>
 
 <template>
   <form @submit.prevent>
+    {{ newRestaurant.name }}
     <div class="field">
       <div class="field">
         <label for="name" class="label">Name</label>
         <div class="control">
           <input
             :value="newRestaurant.name"
-            @keyup.space="updateName"
+            @input="updateName"
             type="text"
             class="input is-large"
             placeholder="Beignet and the Jets"
@@ -53,8 +71,8 @@ export default defineComponent({
       </div>
       <div class="field">
         <div class="buttons">
-          <button @click="$emit('add-new-restaurant', newRestaurant)" class="button is-success">Create</button>
-          <button @click="$emit('cancel-new-restaurant')" class="button is-light">Cancel</button>
+          <button @click="addRestaurant" class="button is-success">Create</button>
+          <button @click="cancelNewRestaurant" class="button is-light">Cancel</button>
         </div>
       </div>
     </div>

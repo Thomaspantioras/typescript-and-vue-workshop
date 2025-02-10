@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Dish } from '@/types'
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import type { PropType } from 'vue'
 
 type PropTypes = {
